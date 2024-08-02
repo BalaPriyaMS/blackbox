@@ -5,22 +5,69 @@
       "type": "Car",
       "states": [
         {
-          "timestamp": "2024-07-01T08:00:00Z",
+          "from": "2024-07-01",
+          "to": "2024-07-2",
           "location": "34.0522,-118.2437",
           "speed": 60,
-          "fuelLevel": 75
+          "fuelLevel": 75,
+          "CellType": 1,
+          "MCC": 425,
+          "MNC": 55,
+          "TAC": 223,
+          "CELLID": 307339,
+          "PCI": 117
         },
         {
-          "timestamp": "2024-07-01T12:00:00Z",
+          "from": "2024-07-02",
+          "to": "2024-07-3",
           "location": "36.1699,-115.1398",
           "speed": 70,
-          "fuelLevel": 50
+          "fuelLevel": 50,
+          "CellType": 1,
+          "MCC": 45,
+          "MNC": 74,
+          "TAC": 4223,
+          "CELLID": 30761339,
+          "PCI": 117
         },
         {
-          "timestamp": "2024-07-01T16:00:00Z",
+          "from": "2024-07-03",
+          "to": "2024-07-4",
           "location": "37.7749,-122.4194",
           "speed": 65,
-          "fuelLevel": 30
+          "fuelLevel": 30,
+          "CellType": 1,
+          "MCC": 47,
+          "MNC": 57,
+          "TAC": 323,
+          "CELLID": 23039,
+          "PCI": 177
+        },
+        {
+          "from": "2024-07-04",
+          "to": "2024-07-5",
+          "location": "34.0522,-118.2437",
+          "speed": 60,
+          "fuelLevel": 70,
+          "CellType": 1,
+          "MCC": 425,
+          "MNC": 55,
+          "TAC": 223,
+          "CELLID": 307339,
+          "PCI": 117
+        },
+        {
+          "from": "2024-07-05",
+          "to": "2024-07-",
+          "location": "36.1699,-115.1398",
+          "speed": 75,
+          "fuelLevel": 45,
+          "CellType": 1,
+          "MCC": 45,
+          "MNC": 74,
+          "TAC": 4223,
+          "CELLID": 30761339,
+          "PCI": 117
         }
       ]
     },
@@ -29,22 +76,69 @@
       "type": "Truck",
       "states": [
         {
-          "timestamp": "2024-07-01T09:00:00Z",
+          "from": "2024-07-01",
+          "to": "2024-07-2",
           "location": "40.7128,-74.0060",
           "speed": 55,
-          "fuelLevel": 80
+          "fuelLevel": 80,
+          "CellType": 1,
+          "MCC": 65,
+          "MNC": 64,
+          "TAC": 3623,
+          "CELLID": 6761339,
+          "PCI": 167
         },
         {
-          "timestamp": "2024-07-01T13:00:00Z",
+          "from": "2024-07-02",
+          "to": "2024-07-3",
           "location": "41.8781,-87.6298",
           "speed": 60,
-          "fuelLevel": 60
+          "fuelLevel": 60,
+          "CellType": 1,
+          "MCC": 75,
+          "MNC": 74,
+          "TAC": 3723,
+          "CELLID": 2371339,
+          "PCI": 187
         },
         {
-          "timestamp": "2024-07-01T17:00:00Z",
+          "from": "2024-07-03",
+          "to": "2024-07-4",
           "location": "34.0522,-118.2437",
           "speed": 50,
-          "fuelLevel": 40
+          "fuelLevel": 40,
+          "CellType": 1,
+          "MCC": 49,
+          "MNC": 94,
+          "TAC": 9223,
+          "CELLID": 961339,
+          "PCI": 197
+        },
+        {
+          "from": "2024-07-04",
+          "to": "2024-07-5",
+          "location": "40.7128,-74.0060",
+          "speed": 58,
+          "fuelLevel": 78,
+          "CellType": 1,
+          "MCC": 65,
+          "MNC": 64,
+          "TAC": 3623,
+          "CELLID": 6761339,
+          "PCI": 167
+        },
+        {
+          "from": "2024-07-05",
+          "to": "2024-07-",
+          "location": "41.8781,-87.6298",
+          "speed": 62,
+          "fuelLevel": 58,
+          "CellType": 1,
+          "MCC": 75,
+          "MNC": 74,
+          "TAC": 3723,
+          "CELLID": 2371339,
+          "PCI": 187
         }
       ]
     },
@@ -53,22 +147,69 @@
       "type": "Truck",
       "states": [
         {
-          "timestamp": "2024-07-01T09:00:00Z",
+          "from": "2024-07-01",
+          "to": "2024-07-2",
           "location": "40.7128,-74.0060",
           "speed": 55,
-          "fuelLevel": 80
+          "fuelLevel": 90,
+          "CellType": 1,
+          "MCC": 40,
+          "MNC": 50,
+          "TAC": 3403,
+          "CELLID": 2061339,
+          "PCI": 11
         },
         {
-          "timestamp": "2024-07-01T13:00:00Z",
+          "from": "2024-07-02",
+          "to": "2024-07-3",
           "location": "41.8781,-87.6298",
           "speed": 60,
-          "fuelLevel": 60
+          "fuelLevel": 80,
+          "CellType": 1,
+          "MCC": 49,
+          "MNC": 56,
+          "TAC": 343,
+          "CELLID": 2351339,
+          "PCI": 157
         },
         {
-          "timestamp": "2024-07-01T17:00:00Z",
+          "from": "2024-07-03",
+          "to": "2024-07-4",
           "location": "34.0522,-118.2437",
           "speed": 50,
-          "fuelLevel": 40
+          "fuelLevel": 30,
+          "CellType": 17,
+          "MCC": 75,
+          "MNC": 54,
+          "TAC": 342,
+          "CELLID": 230739,
+          "PCI": 1157
+        },
+        {
+          "from": "2024-07-04",
+          "to": "2024-07-5",
+          "location": "40.7128,-74.0060",
+          "speed": 57,
+          "fuelLevel": 88,
+          "CellType": 1,
+          "MCC": 40,
+          "MNC": 50,
+          "TAC": 3403,
+          "CELLID": 2061339,
+          "PCI": 11
+        },
+        {
+          "from": "2024-07-05",
+          "to": "2024-07-",
+          "location": "41.8781,-87.6298",
+          "speed": 62,
+          "fuelLevel": 78,
+          "CellType": 1,
+          "MCC": 49,
+          "MNC": 56,
+          "TAC": 343,
+          "CELLID": 2351339,
+          "PCI": 157
         }
       ]
     },
@@ -77,22 +218,69 @@
       "type": "Truck",
       "states": [
         {
-          "timestamp": "2024-07-01T09:00:00Z",
+          "from": "2024-07-01",
+          "to": "2024-07-2",
           "location": "40.7128,-74.0060",
           "speed": 55,
-          "fuelLevel": 80
+          "fuelLevel": 85,
+          "CellType": 19,
+          "MCC": 4059,
+          "MNC": 52,
+          "TAC": 343,
+          "CELLID": 761339,
+          "PCI": 117
         },
         {
-          "timestamp": "2024-07-01T13:00:00Z",
+          "from": "2024-07-02",
+          "to": "2024-07-3",
           "location": "41.8781,-87.6298",
           "speed": 60,
-          "fuelLevel": 60
+          "fuelLevel": 65,
+          "CellType": 17,
+          "MCC": 40,
+          "MNC": 54,
+          "TAC": 323,
+          "CELLID": 761339,
+          "PCI": 157
         },
         {
-          "timestamp": "2024-07-01T17:00:00Z",
+          "from": "2024-07-03",
+          "to": "2024-07-4",
           "location": "34.0522,-118.2437",
           "speed": 50,
-          "fuelLevel": 40
+          "fuelLevel": 59,
+          "CellType": 31,
+          "MCC": 45,
+          "MNC": 55,
+          "TAC": 342,
+          "CELLID": 2307639,
+          "PCI": 115
+        },
+        {
+          "from": "2024-07-04",
+          "to": "2024-07-5",
+          "location": "40.7128,-74.0060",
+          "speed": 58,
+          "fuelLevel": 82,
+          "CellType": 19,
+          "MCC": 4059,
+          "MNC": 52,
+          "TAC": 343,
+          "CELLID": 761339,
+          "PCI": 117
+        },
+        {
+          "from": "2024-07-05",
+          "to": "2024-07-",
+          "location": "41.8781,-87.6298",
+          "speed": 62,
+          "fuelLevel": 63,
+          "CellType": 17,
+          "MCC": 40,
+          "MNC": 54,
+          "TAC": 323,
+          "CELLID": 761339,
+          "PCI": 157
         }
       ]
     }

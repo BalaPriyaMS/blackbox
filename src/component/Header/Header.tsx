@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import html2pdf from "html2pdf.js"; // Import html2pdf.js
 import icon from "../../assets/logo-bb.png";
 import copy from "../../assets/copy.png";
 import {
@@ -16,7 +17,8 @@ interface Vehicle {
   vehicleId: string;
   type: string;
   states: {
-    timestamp: string;
+    from: string;
+    to: string;
     location: string;
     speed: number;
     fuelLevel: number;
@@ -26,9 +28,17 @@ interface Vehicle {
 
 interface HeaderProps {
   setVehicle: (vehicle: Vehicle | null) => void;
+  setFetchGraph: (fetch: boolean) => void;
+  setSelectedGraph: (selectgraph: boolean) => void;
+  setDateRange: (dateRange: { from: Date; to: Date }) => void;
 }
 
-const Header = ({ setVehicle }: HeaderProps) => {
+const Header = ({
+  setVehicle,
+  setFetchGraph,
+  setSelectedGraph,
+  setDateRange,
+}: HeaderProps) => {
   const [vehicleList, setVehicleList] = useState<Vehicle[]>([]);
   const [copyText, setCopyText] = useState<string | null>(null);
   const [showVehicleType, setShowVehicleType] = useState(false);
@@ -54,8 +64,28 @@ const Header = ({ setVehicle }: HeaderProps) => {
     }
   };
 
+  // Function to download content as PDF
+  const downloadAsPDF = () => {
+    const element = document.body; // You can specify a more specific element if needed
+
+    const options = {
+      margin: 0.5, // Adjust margins as needed
+      filename: "blackBox.pdf",
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2 }, // Increase scale for better quality
+      jsPDF: {
+        unit: "in",
+        format: [20, 15], // or 'letter' for US letter size
+        orientation: "landscape", // or 'landscape'
+        compressPdf: true, // Compress the PDF to reduce size
+      },
+    };
+
+    html2pdf().from(element).set(options).save();
+  };
+
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 pb-4">
       <img src={icon} alt="bb icon" className="w-24 h-11" />
       <div className="flex gap-4 w-full h-16 border-2 border-gray-700 p-3 items-center justify-between">
         <div className="flex gap-6 items-center ">
@@ -67,6 +97,7 @@ const Header = ({ setVehicle }: HeaderProps) => {
               if (selectedVehicle) {
                 setCopyText(selectedVehicle.vehicleId);
                 setVehicle(selectedVehicle);
+                setFetchGraph(false);
               }
             }}
           >
@@ -91,8 +122,15 @@ const Header = ({ setVehicle }: HeaderProps) => {
             <Switch id="airplane-mode" onCheckedChange={setShowVehicleType} />
             <label htmlFor="airplane-mode">Type</label>
           </div>
-          <DatePickerWithRange />
-          <Select>
+          <DatePickerWithRange onChange={setDateRange} />
+          <Select
+            onValueChange={(value) => {
+              if (value === "scatter") setSelectedGraph(true);
+              else {
+                setSelectedGraph(false);
+              }
+            }}
+          >
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Select graph type" />
             </SelectTrigger>
@@ -101,10 +139,22 @@ const Header = ({ setVehicle }: HeaderProps) => {
               <SelectItem value="scatter">Scatter</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="secondary" className="hover:bg-slate-300">
+          <Button
+            variant="secondary"
+            className="hover:bg-slate-300"
+            onClick={() => {
+              setFetchGraph(true);
+            }}
+          >
             Fetch All
           </Button>
-          <Button variant="secondary" className="hover:bg-slate-300">
+          <Button
+            variant="secondary"
+            className="hover:bg-slate-300"
+            onClick={() => {
+              setFetchGraph(false);
+            }}
+          >
             Clear All
           </Button>
         </div>
@@ -112,7 +162,11 @@ const Header = ({ setVehicle }: HeaderProps) => {
           <Button variant="secondary" className="hover:bg-slate-300">
             Show Map
           </Button>
-          <Button variant="secondary" className="hover:bg-slate-300">
+          <Button
+            variant="secondary"
+            className="hover:bg-slate-300"
+            onClick={downloadAsPDF} // Attach the download function to the button
+          >
             PDF
           </Button>
           <Button variant="secondary" className="hover:bg-slate-300">
