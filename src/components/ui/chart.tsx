@@ -14,6 +14,14 @@ const Chart = (props: PropsType) => {
     const chartInstance = echarts.init(chartRef.current);
 
     chartInstance.setOption(options);
+    chartInstance.group = "chart-group";
+    echarts.connect("chart-group");
+
+    chartInstance.dispatchAction({
+      type: "takeGlobalCursor",
+      key: "dataZoomSelect",
+      dataZoomSelectActive: true,
+    });
 
     const handleResize = () => chartInstance.resize();
 

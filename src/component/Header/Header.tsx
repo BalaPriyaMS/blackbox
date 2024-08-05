@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import html2pdf from "html2pdf.js"; // Import html2pdf.js
+import html2pdf from "html2pdf.js";
 import icon from "../../assets/logo-bb.png";
 import copy from "../../assets/copy.png";
 import {
@@ -12,6 +12,8 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { DatePickerWithRange } from "./DatePickerWithRange";
 import { Button } from "@/components/ui/button";
+import { saveAs } from "file-saver";
+import { cn } from "@/lib/utils";
 
 interface Vehicle {
   vehicleId: string;
@@ -22,6 +24,12 @@ interface Vehicle {
     location: string;
     speed: number;
     fuelLevel: number;
+    cellType: number;
+    MCC: number;
+    MNC: number;
+    TAC: number;
+    CELLID: number;
+    PCI: number;
   }[];
   id: string;
 }
@@ -31,6 +39,8 @@ interface HeaderProps {
   setFetchGraph: (fetch: boolean) => void;
   setSelectedGraph: (selectgraph: boolean) => void;
   setDateRange: (dateRange: { from: Date; to: Date }) => void;
+  setMode: (mode: boolean) => void;
+  mode: boolean;
 }
 
 const Header = ({
@@ -38,6 +48,8 @@ const Header = ({
   setFetchGraph,
   setSelectedGraph,
   setDateRange,
+  setMode,
+  mode,
 }: HeaderProps) => {
   const [vehicleList, setVehicleList] = useState<Vehicle[]>([]);
   const [copyText, setCopyText] = useState<string | null>(null);
@@ -49,7 +61,7 @@ const Header = ({
       try {
         const response = await fetch(url);
         const data = await response.json();
-        console.log(data, "data");
+        // console.log(data, "data");
         setVehicleList(data);
       } catch (error) {
         console.error("Failed to fetch data:", error);
@@ -69,23 +81,73 @@ const Header = ({
     const element = document.body; // You can specify a more specific element if needed
 
     const options = {
-      margin: 0.5, // Adjust margins as needed
+      margin: 0.5,
       filename: "blackBox.pdf",
       image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 }, // Increase scale for better quality
+      html2canvas: { scale: 2 },
       jsPDF: {
         unit: "in",
-        format: [20, 15], // or 'letter' for US letter size
-        orientation: "landscape", // or 'landscape'
-        compressPdf: true, // Compress the PDF to reduce size
+        format: [20, 15],
+        orientation: "landscape",
+        compressPdf: true,
       },
     };
 
     html2pdf().from(element).set(options).save();
   };
 
+  const convertToCSV = (data: Vehicle[]) => {
+    const header = [
+      "Vehicle ID",
+      "Type",
+      "From",
+      "To",
+      "Speed",
+      "Fuel Level",
+      "CellType",
+      "MCC",
+      "MNC",
+      "TAC",
+      "CELLID",
+      "PCI",
+    ];
+
+    const rows = data.flatMap((vehicle) =>
+      vehicle.states.map((state) => {
+        console.log(`Processing state for vehicle ${vehicle.vehicleId}`, state);
+
+        return [
+          vehicle.vehicleId,
+          vehicle.type,
+          state.from,
+          state.to,
+          state.speed,
+          state.fuelLevel,
+          state.cellType,
+          state.MCC,
+          state.MNC,
+          state.TAC,
+          state.CELLID,
+          state.PCI,
+        ];
+      })
+    );
+
+    const csvContent = [header, ...rows].map((e) => e.join(",")).join("\n");
+    return csvContent;
+  };
+
+  // Function to download CSV file
+  const downloadCSV = () => {
+    const csvData = convertToCSV(vehicleList);
+    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+    saveAs(blob, "vehicle_data.csv");
+  };
+
   return (
-    <div className="flex flex-col gap-4 pb-4">
+    <div
+      className={cn("flex flex-col gap-4", mode ? "bg-[#1e1b4b]" : "bg-white")}
+    >
       <img src={icon} alt="bb icon" className="w-24 h-11" />
       <div className="flex gap-4 w-full h-16 border-2 border-gray-700 p-3 items-center justify-between">
         <div className="flex gap-6 items-center ">
@@ -113,14 +175,22 @@ const Header = ({
             </SelectContent>
           </Select>
           <button
-            className="w-7 h-full border border-gray-700 items-center rounded-sm"
+            className={cn(
+              "w-7 h-full border border-gray-700 items-center rounded-sm ",
+              mode ? "bg-white" : ""
+            )}
             onClick={handleCopied}
           >
             <img src={copy} alt="copy icon" className="w-6 h-6" />
           </button>
-          <div className="flex items-center space-x-2">
-            <Switch id="airplane-mode" onCheckedChange={setShowVehicleType} />
-            <label htmlFor="airplane-mode">Type</label>
+          <div
+            className={cn(
+              "flex items-center space-x-2",
+              mode ? "text-white" : "text-black"
+            )}
+          >
+            <Switch onCheckedChange={setShowVehicleType} />
+            <label>Device Type</label>
           </div>
           <DatePickerWithRange onChange={setDateRange} />
           <Select
@@ -169,9 +239,22 @@ const Header = ({
           >
             PDF
           </Button>
-          <Button variant="secondary" className="hover:bg-slate-300">
+          <Button
+            variant="secondary"
+            className="hover:bg-slate-300"
+            onClick={downloadCSV}
+          >
             Download
           </Button>
+          <div
+            className={cn(
+              "flex items-center space-x-2",
+              mode ? "text-white" : "text-black"
+            )}
+          >
+            <Switch checked={mode} onCheckedChange={setMode} />
+            <label>Mode</label>
+          </div>
         </div>
       </div>
     </div>

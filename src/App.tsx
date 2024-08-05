@@ -23,19 +23,24 @@ function App() {
   const [dateRange, setDateRange] = useState<{ from: Date; to: Date } | null>(
     null
   );
+  const [mode, setMode] = useState(false);
   return (
-    <div className="">
+    <div className="grid grid-rows-[150px_auto] ">
       <Header
         setVehicle={setVehicle}
         setFetchGraph={setFetchGraph}
         setSelectedGraph={setSelectedGraph}
         setDateRange={setDateRange}
+        setMode={setMode}
+        mode={mode}
       />
+
       {fetchGraph && (
         <Graph
           vehicle={vehicle}
           selectedGraph={selectedGraph}
           dateRange={dateRange}
+          mode={mode}
         />
       )}
     </div>

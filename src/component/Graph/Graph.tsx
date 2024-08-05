@@ -1,6 +1,8 @@
 import React from "react";
 import Chart from "@/components/ui/chart";
 import * as echarts from "echarts";
+import Alerts from "../alert";
+import { cn } from "@/lib/utils";
 
 // Define the structure of the state object
 interface State {
@@ -17,9 +19,15 @@ interface GraphProps {
   } | null;
   selectedGraph: boolean;
   dateRange: { from: Date; to: Date } | null;
+  mode: boolean;
 }
 
-const Graph: React.FC<GraphProps> = ({ vehicle, selectedGraph, dateRange }) => {
+const Graph: React.FC<GraphProps> = ({
+  vehicle,
+  selectedGraph,
+  dateRange,
+  mode,
+}) => {
   if (!vehicle) return null;
 
   const filteredStates = vehicle.states.filter((state) => {
@@ -31,9 +39,7 @@ const Graph: React.FC<GraphProps> = ({ vehicle, selectedGraph, dateRange }) => {
   });
 
   if (filteredStates.length === 0) {
-    return (
-      <div className="pt-4">No data available for the selected date range.</div>
-    );
+    return <Alerts msg="No Data Found In This Date" />;
   }
 
   const uniqueKeys = Object.keys(filteredStates[0]).filter(
@@ -41,10 +47,18 @@ const Graph: React.FC<GraphProps> = ({ vehicle, selectedGraph, dateRange }) => {
   );
 
   return (
-    <div className="grid grid-cols-3 gap-4 pt-4">
+    <div
+      className={cn(
+        "grid grid-cols-3 gap-4",
+        mode ? "bg-[#1e1b4b]" : "bg-white"
+      )}
+    >
       {uniqueKeys.map((key) => {
         const options: echarts.EChartsOption = {
-          title: { text: key.charAt(0).toUpperCase() + key.slice(1) },
+          title: {
+            text: key.charAt(0).toUpperCase() + key.slice(1),
+            textStyle: { color: mode ? "white" : "black" },
+          },
           tooltip: { trigger: "axis" },
           xAxis: {
             type: "time",
@@ -54,10 +68,15 @@ const Graph: React.FC<GraphProps> = ({ vehicle, selectedGraph, dateRange }) => {
           yAxis: {
             type: "value",
           },
+          toolbox: {
+            feature: {
+              dataZoom: { yAxisIndex: "none", icon: { zoom: "path://" } },
+            },
+          },
           series: [
             {
               name: key.charAt(0).toUpperCase() + key.slice(1),
-              type: selectedGraph ? "scatter" : "line", // Use line type to plot values over time
+              type: selectedGraph ? "scatter" : "line",
               data: filteredStates.map((state) => ({
                 name: new Date(state.from).toLocaleDateString(),
                 value: [
@@ -66,6 +85,7 @@ const Graph: React.FC<GraphProps> = ({ vehicle, selectedGraph, dateRange }) => {
                 ],
               })),
               smooth: true,
+              connectNulls: true,
             },
           ],
         };
