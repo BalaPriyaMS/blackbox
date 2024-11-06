@@ -12,6 +12,12 @@ export interface Vehicle {
     location: string;
     speed: number;
     fuelLevel: number;
+    CellType: number;
+    MCC: number;
+    MNC: number;
+    TAC: number;
+    CELLID: number;
+    PCI: number;
   }[];
   id: string;
 }
@@ -33,6 +39,7 @@ function App() {
         setDateRange={setDateRange}
         setMode={setMode}
         mode={mode}
+        vehicle={vehicle}
       />
 
       {fetchGraph && (

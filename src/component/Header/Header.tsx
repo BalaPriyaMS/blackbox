@@ -14,6 +14,7 @@ import { DatePickerWithRange } from "./DatePickerWithRange";
 import { Button } from "@/components/ui/button";
 import { saveAs } from "file-saver";
 import { cn } from "@/lib/utils";
+import MapContainer from "../MapContainer";
 
 interface Vehicle {
   vehicleId: string;
@@ -24,7 +25,7 @@ interface Vehicle {
     location: string;
     speed: number;
     fuelLevel: number;
-    cellType: number;
+    CellType: number;
     MCC: number;
     MNC: number;
     TAC: number;
@@ -41,6 +42,7 @@ interface HeaderProps {
   setDateRange: (dateRange: { from: Date; to: Date }) => void;
   setMode: (mode: boolean) => void;
   mode: boolean;
+  vehicle: Vehicle | null;
 }
 
 const Header = ({
@@ -50,18 +52,19 @@ const Header = ({
   setDateRange,
   setMode,
   mode,
+  vehicle,
 }: HeaderProps) => {
   const [vehicleList, setVehicleList] = useState<Vehicle[]>([]);
   const [copyText, setCopyText] = useState<string | null>(null);
   const [showVehicleType, setShowVehicleType] = useState(false);
   const url = "http://localhost:5000/vehicles";
+  const [showMap, setShowMap] = useState(false);
 
   useEffect(() => {
     const fetchMethod = async () => {
       try {
         const response = await fetch(url);
         const data = await response.json();
-        // console.log(data, "data");
         setVehicleList(data);
       } catch (error) {
         console.error("Failed to fetch data:", error);
@@ -76,9 +79,8 @@ const Header = ({
     }
   };
 
-  // Function to download content as PDF
   const downloadAsPDF = () => {
-    const element = document.body; // You can specify a more specific element if needed
+    const element = document.body;
 
     const options = {
       margin: 0.5,
@@ -114,8 +116,6 @@ const Header = ({
 
     const rows = data.flatMap((vehicle) =>
       vehicle.states.map((state) => {
-        console.log(`Processing state for vehicle ${vehicle.vehicleId}`, state);
-
         return [
           vehicle.vehicleId,
           vehicle.type,
@@ -123,7 +123,7 @@ const Header = ({
           state.to,
           state.speed,
           state.fuelLevel,
-          state.cellType,
+          state.CellType,
           state.MCC,
           state.MNC,
           state.TAC,
@@ -137,7 +137,6 @@ const Header = ({
     return csvContent;
   };
 
-  // Function to download CSV file
   const downloadCSV = () => {
     const csvData = convertToCSV(vehicleList);
     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
@@ -223,40 +222,45 @@ const Header = ({
             className="hover:bg-slate-300"
             onClick={() => {
               setFetchGraph(false);
+              setVehicle(null);
             }}
           >
-            Clear All
+            Clear Graph
           </Button>
         </div>
-        <div className="flex items-center gap-6">
-          <Button variant="secondary" className="hover:bg-slate-300">
+        <div className="flex items-center space-x-2">
+          <Button
+            variant="secondary"
+            className="hover:bg-slate-300"
+            onClick={() => {
+              setShowMap(true);
+            }}
+          >
             Show Map
           </Button>
           <Button
             variant="secondary"
             className="hover:bg-slate-300"
-            onClick={downloadAsPDF} // Attach the download function to the button
+            onClick={downloadAsPDF}
           >
-            PDF
+            Download as PDF
           </Button>
           <Button
             variant="secondary"
             className="hover:bg-slate-300"
             onClick={downloadCSV}
           >
-            Download
+            Download CSV
           </Button>
-          <div
-            className={cn(
-              "flex items-center space-x-2",
-              mode ? "text-white" : "text-black"
-            )}
-          >
-            <Switch checked={mode} onCheckedChange={setMode} />
-            <label>Mode</label>
-          </div>
+          <Switch onCheckedChange={setMode} />
+          <label className={mode ? "text-white" : "text-black"}>
+            Dark Mode
+          </label>
         </div>
       </div>
+      {showMap && vehicle && (
+        <MapContainer vehicle={vehicle} onClose={() => setShowMap(false)} />
+      )}
     </div>
   );
 };
